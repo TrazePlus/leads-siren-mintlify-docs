@@ -1,0 +1,52 @@
+---
+title: 'Code Blocks'
+description: 'Display code with syntax highlighting'
+---
+
+## Basic Code Block
+
+Use triple backticks with a language for syntax highlighting:
+
+````md
+```python
+def hello():
+    print("Hello!")
+```
+````
+
+## Multi-language Examples
+
+Use `<CodeGroup>` to show the same example in multiple languages:
+
+<CodeGroup>
+```bash cURL
+curl -X POST https://search.lespagesrouges.com/enrichment-service/search_companies \
+  -H "x-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"data": {"filters": {"departement": "75"}, "page": 1}}'
+```
+
+```python Python
+import requests
+
+resp = requests.post(
+    "https://search.lespagesrouges.com/enrichment-service/search_companies",
+    headers={"x-api-key": "YOUR_API_KEY"},
+    json={"data": {"filters": {"departement": "75"}, "page": 1}}
+)
+```
+
+```javascript JavaScript
+const resp = await fetch(
+  "https://search.lespagesrouges.com/enrichment-service/search_companies",
+  {
+    method: "POST",
+    headers: {
+      "x-api-key": "YOUR_API_KEY",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({data: {filters: {departement: "75"}, page: 1}})
+  }
+);
+```
+</CodeGroup>

@@ -1,0 +1,70 @@
+---
+title: "Quickstart"
+description: "Get started with the Enrichment API in minutes"
+---
+
+## Get started in three steps
+
+<Steps>
+
+### Step 1: Get your API key
+
+1. Sign up or log in at your [dashboard](https://search.lespagesrouges.com).
+2. Navigate to your account settings to create an API key.
+3. Copy and store your key securely — it is shown only once.
+
+### Step 2: Make your first request
+
+Use your API key to test the connection:
+
+```bash
+curl -X GET https://search.lespagesrouges.com/enrichment-service/test \
+  -H "x-api-key: YOUR_API_KEY"
+```
+
+You should receive:
+
+```json
+{
+  "status": "It worked."
+}
+```
+
+### Step 3: Search for companies
+
+Now try a real search:
+
+```bash
+curl -X POST https://search.lespagesrouges.com/enrichment-service/search_companies \
+  -H "x-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "data": {
+      "filters": {
+        "departement": ["75"],
+        "activite_principale": ["62.01Z"],
+        "etat_administratif": "A"
+      },
+      "page": 1
+    }
+  }'
+```
+
+</Steps>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="API Introduction" icon="book" href="/api-reference/introduction">
+    Learn about authentication, credits, and error handling.
+  </Card>
+  <Card title="Search Executives" icon="user-tie" href="/api-reference/endpoint/search-executives">
+    Find executives for specific companies.
+  </Card>
+  <Card title="Enrich Data" icon="database" href="/api-reference/endpoint/enrich">
+    Run a full enrichment pipeline on your records.
+  </Card>
+  <Card title="Enrich Single" icon="magnifying-glass" href="/api-reference/endpoint/enrich-single">
+    Enrich a single company by SIREN number.
+  </Card>
+</CardGroup>

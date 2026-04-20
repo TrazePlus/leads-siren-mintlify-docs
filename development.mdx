@@ -1,0 +1,76 @@
+---
+title: 'Development'
+description: 'Preview documentation changes locally'
+---
+
+<Info>
+  **Prerequisites**:
+  - Node.js version 19 or higher
+  - A docs repository with a `docs.json` file
+</Info>
+
+Follow these steps to install and run Mintlify on your operating system.
+
+<Steps>
+
+<Step title="Install Mintlify CLI">
+
+```bash
+npm i -g mint
+```
+</Step>
+
+<Step title="Start local preview">
+
+Navigate to the `Mintlify` directory where `docs.json` lives, then run:
+
+```bash
+mint dev
+```
+
+A local preview of your documentation will be available at `http://localhost:3000`.
+
+</Step>
+
+</Steps>
+
+## Custom ports
+
+By default, Mintlify uses port 3000. You can customize the port using the `--port` flag:
+
+```bash
+mint dev --port 3333
+```
+
+## Mintlify versions
+
+Each CLI release is associated with a specific version of Mintlify. If your local preview does not align with the production version, update the CLI:
+
+```bash
+npm i -g mint@latest
+```
+
+## Validating links
+
+The CLI can assist with validating links. To identify any broken links:
+
+```bash
+mint broken-links
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+
+<Accordion title="Mintlify is not loading">
+  This may be due to an outdated version of Node. Try:
+  1. Remove the current CLI: `npm remove -g mint`
+  2. Upgrade to Node v19 or higher.
+  3. Reinstall the CLI: `npm i -g mint`
+</Accordion>
+
+<Accordion title="Encountering an unknown error">
+  Go to the root of your device and delete the `~/.mintlify` folder. Then run `mint dev` again.
+</Accordion>
+
+</AccordionGroup>

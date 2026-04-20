@@ -1,0 +1,78 @@
+---
+title: 'Settings'
+description: 'Customize your documentation site'
+---
+
+## Colors
+
+Set your brand colors in `docs.json`:
+
+```json
+{
+  "colors": {
+    "primary": "#c0392b",
+    "light": "#e74c3c",
+    "dark": "#922b21"
+  }
+}
+```
+
+## Logo
+
+Place your logo files in the `/logo` directory and reference them in `docs.json`:
+
+```json
+{
+  "logo": {
+    "light": "/logo/light.png",
+    "dark": "/logo/dark.png"
+  }
+}
+```
+
+## Favicon
+
+```json
+{
+  "favicon": {
+    "light": "/logo/dark.png",
+    "dark": "/logo/light.png"
+  }
+}
+```
+
+## Navbar
+
+Configure the top navigation bar:
+
+```json
+{
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:support@lespagesrouges.com"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://search.lespagesrouges.com"
+    }
+  }
+}
+```
+
+## Footer
+
+Add social links to the footer:
+
+```json
+{
+  "footer": {
+    "socials": {
+      "website": "https://lespagesrouges.com"
+    }
+  }
+}
+```

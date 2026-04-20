@@ -1,0 +1,77 @@
+---
+title: 'Enrich Single'
+api: 'POST /enrichment-service/enrich-single'
+---
+
+Synchronously enrich data for a single company identified by its SIREN number. Unlike the background `/enrich` endpoint, this returns the enriched data directly in the response.
+
+## Request Body
+
+<ParamField body="data" type="object">
+  <Expandable title="properties">
+    <ParamField body="siren" type="string" required>
+      The 9-digit SIREN number of the company to enrich.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Credit Cost
+
+Dynamic — based on the number of records enriched for the given SIREN.
+
+<RequestExample>
+```bash cURL
+curl -X POST https://search.lespagesrouges.com/enrichment-service/enrich-single \
+  -H "x-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "data": {
+      "siren": "123456789"
+    }
+  }'
+```
+
+```python Python
+import requests
+
+resp = requests.post(
+    "https://search.lespagesrouges.com/enrichment-service/enrich-single",
+    headers={"x-api-key": "YOUR_API_KEY"},
+    json={
+        "data": {
+            "siren": "123456789"
+        }
+    }
+)
+print(resp.json())
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "siren": "123456789",
+  "total_records": 5,
+  "data": [
+    {
+      "full_name": "Jean Dupont",
+      "phone": "+33 1 23 45 67 89",
+      "email": "jean.dupont@example.com",
+      "address": "12 Rue de Rivoli",
+      "city": "Paris"
+    }
+  ],
+  "credits_used": {
+    "lookup": 5,
+    "enrichment": 3,
+    "total": 8
+  }
+}
+```
+
+```json 400
+{
+  "detail": "Missing siren"
+}
+```
+</ResponseExample>

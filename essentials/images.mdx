@@ -1,0 +1,36 @@
+---
+title: 'Images & Media'
+description: 'Add images and other media to your documentation'
+---
+
+## Images
+
+Use markdown syntax to add images:
+
+```md
+![Alt text](/images/example.png)
+```
+
+### Light/Dark Mode Images
+
+Use the `<Frame>` component to add captions:
+
+```mdx
+<Frame caption="This is a caption">
+  <img src="/images/example.png" alt="Example" />
+</Frame>
+```
+
+## Embedding Videos
+
+```mdx
+<iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/VIDEO_ID"
+  title="Video title"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen
+/>
+```

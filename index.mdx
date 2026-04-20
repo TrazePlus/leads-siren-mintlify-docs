@@ -1,0 +1,41 @@
+---
+title: "Introduction"
+description: "Welcome to the Enrichment API documentation"
+---
+
+## Overview
+
+The Enrichment API provides programmatic access to French company search, executive lookup, and data enrichment services. Use it to search companies, find executives, and enrich records with combined data.
+
+## Base URL
+
+All API requests are made to the following base URL:
+
+```
+https://search.lespagesrouges.com/enrichment-service
+```
+
+## Key Capabilities
+
+<CardGroup cols={2}>
+  <Card title="Company Search" icon="building" href="/api-reference/endpoint/search-companies">
+    Search French companies by department, NAF code, legal form, employee count, and more.
+  </Card>
+  <Card title="Executive Search" icon="user-tie" href="/api-reference/endpoint/search-executives">
+    Look up executives (dirigeants) for one or more companies by SIREN number.
+  </Card>
+  <Card title="Enrich Single" icon="magnifying-glass" href="/api-reference/endpoint/enrich-single">
+    Synchronously enrich a single company by its SIREN number.
+  </Card>
+  <Card title="Data Enrichment" icon="database" href="/api-reference/endpoint/enrich">
+    Enrich records with combined company and executive data, exported as CSV.
+  </Card>
+</CardGroup>
+
+## Authentication
+
+All secured endpoints require an API key passed in the `x-api-key` header.
+
+<Card title="Get Started" icon="rocket" href="/api-reference/introduction">
+  Read the full API introduction and learn how to authenticate.
+</Card>

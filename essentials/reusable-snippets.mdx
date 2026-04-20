@@ -1,0 +1,32 @@
+---
+title: 'Reusable Snippets'
+description: 'Reuse content across multiple pages'
+---
+
+## Creating Snippets
+
+Snippets are MDX files stored in the `/snippets` directory. They let you write content once and reuse it across pages.
+
+### Example: Authentication Snippet
+
+Create a file at `snippets/auth-header.mdx`:
+
+```mdx
+<ParamField header="x-api-key" type="string" required>
+  Your API key.
+</ParamField>
+```
+
+### Using the Snippet
+
+Import it in any page:
+
+```mdx
+<Snippet file="auth-header.mdx" />
+```
+
+## Best Practices
+
+- Store all snippets in the `/snippets` directory.
+- Use descriptive filenames like `auth-header.mdx`, `credit-warning.mdx`.
+- Snippets can contain any valid MDX content including components.

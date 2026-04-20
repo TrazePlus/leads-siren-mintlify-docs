@@ -1,0 +1,92 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Enrichment API",
+  "colors": {
+    "primary": "#c0392b",
+    "light": "#e74c3c",
+    "dark": "#922b21"
+  },
+  "favicon": {
+    "light": "/logo/dark.png",
+    "dark": "/logo/light.png"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "api-reference/introduction"
+            ]
+          },
+          {
+            "group": "Search",
+            "pages": [
+              "api-reference/endpoint/search-companies",
+              "api-reference/endpoint/search-executives"
+            ]
+          },
+          {
+            "group": "Enrichment",
+            "pages": [
+              "api-reference/endpoint/enrich",
+              "api-reference/endpoint/enrich-single"
+            ]
+          },
+          {
+            "group": "Results & Downloads",
+            "pages": [
+              "api-reference/endpoint/view-enrichment-results",
+              "api-reference/endpoint/generate-download-url",
+              "api-reference/endpoint/download"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "logo": {
+    "light": "/logo/light.png",
+    "dark": "/logo/dark.png"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:support@lespagesrouges.com"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://search.lespagesrouges.com"
+    }
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
+  },
+  "api": {
+    "mdx": {
+      "server": "https://search.lespagesrouges.com",
+      "auth": {
+        "method": "key",
+        "name": "x-api-key"
+      }
+    }
+  },
+  "footer": {
+    "socials": {}
+  }
+}

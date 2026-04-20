@@ -1,0 +1,101 @@
+---
+title: 'Search Executives'
+api: 'POST /enrichment-service/search_executives'
+---
+
+Look up executives (dirigeants) for one or more companies. Provide SIREN numbers directly, or supply company search filters to resolve them automatically. You must provide either `siren_numbers` or `filters` + `limit` — not both.
+
+## Request Body
+
+<ParamField body="data" type="object">
+  <Expandable title="properties">
+    <ParamField body="siren_numbers" type="string[]">
+      List of SIREN numbers to look up executives for.
+    </ParamField>
+    <ParamField body="filters" type="object">
+      Company search filters. Used with `limit` to first search companies, then fetch their executives. All filter fields are optional.
+      <Expandable title="filter fields">
+        <ParamField body="q" type="string[]">
+          Free-text search terms (e.g. company name).
+        </ParamField>
+        <ParamField body="activite_principale" type="string[]">
+          NAF/APE activity codes (e.g. `["62.01Z", "62.02A"]`).
+        </ParamField>
+        <ParamField body="etat_administratif" type="string">
+          Administrative status. `"A"` for active, `"C"` for closed.
+        </ParamField>
+        <ParamField body="tranche_effectif_salarie" type="string[]">
+          Employee count ranges. Allowed values: `"0"`, `"1-9"`, `"10-49"`, `"50-199"`, `"200-499"`, `"500+"`.
+        </ParamField>
+        <ParamField body="departement" type="string[]">
+          French department codes (e.g. `["75", "92", "93"]`).
+        </ParamField>
+        <ParamField body="region" type="string">
+          French region code (e.g. `"11"` for Ile-de-France).
+        </ParamField>
+        <ParamField body="code_postal" type="string[]">
+          Postal codes (e.g. `["75001", "75002"]`).
+        </ParamField>
+        <ParamField body="nature_juridique" type="string[]">
+          Legal form categories. Allowed values: `"Entreprises individuelles"`, `"Sociétés commerciales"`, `"Sociétés civiles"`, `"Associations"`, `"Autres"`.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+    <ParamField body="limit" type="integer">
+      Maximum number of companies to search when using `filters`.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Credit Cost
+
+**1 credit per person** returned in the results.
+
+<RequestExample>
+```bash cURL
+curl -X POST https://search.lespagesrouges.com/enrichment-service/search_executives \
+  -H "x-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "data": {
+      "siren_numbers": ["123456789", "987654321"]
+    }
+  }'
+```
+
+```python Python
+import requests
+
+resp = requests.post(
+    "https://search.lespagesrouges.com/enrichment-service/search_executives",
+    headers={"x-api-key": "YOUR_API_KEY"},
+    json={
+        "data": {
+            "siren_numbers": ["123456789", "987654321"]
+        }
+    }
+)
+print(resp.json())
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "people": [
+    {
+      "nom_complet": "Jean Dupont",
+      "qualite": "Président",
+      "date_de_naissance": "1975-03-15",
+      "entreprises": [ ... ]
+    }
+  ]
+}
+```
+
+```json 402
+{
+  "detail": "Insufficient credits (have 2, need 5)"
+}
+```
+</ResponseExample>

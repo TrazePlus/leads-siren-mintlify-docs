@@ -1,0 +1,74 @@
+---
+title: 'Introduction'
+description: 'Overview of the Enrichment Service API'
+---
+
+## Overview
+
+The Enrichment Service API provides endpoints for searching French companies and executives, enriching data records, looking up individuals, and downloading enriched results. All endpoints live under the `/enrichment-service` prefix.
+
+## Base URL
+
+```
+https://search.lespagesrouges.com/enrichment-service
+```
+
+## Authentication
+
+All secured endpoints require an API key sent in the `x-api-key` header:
+
+```bash
+curl -H "x-api-key: YOUR_API_KEY" \
+  https://search.lespagesrouges.com/enrichment-service/test
+```
+
+Invalid or missing keys return `401 Unauthorized`.
+
+## Credits
+
+Most API operations consume credits from your account balance. The credit cost varies by endpoint:
+
+| Endpoint | Credit Cost |
+|---|---|
+| Search Companies | Fixed per request |
+| Search Executives | 1 credit per person returned |
+| Mandataires | 1 credit per dirigeant returned |
+| Enrich | Dynamic — based on records enriched |
+| Enrich Siren | Dynamic — based on records enriched |
+
+If your account has insufficient credits, the API returns a `402 Payment Required` error with details about your current balance and the required amount.
+
+## Request Format
+
+All `POST` endpoints expect a JSON body with a `data` key:
+
+```json
+{
+  "data": {
+    "filters": { ... },
+    "page": 1
+  }
+}
+```
+
+## Error Handling
+
+The API uses standard HTTP status codes:
+
+| Code | Meaning |
+|---|---|
+| `200` | Success |
+| `400` | Bad request — missing or invalid parameters |
+| `401` | Unauthorized — invalid or missing API key |
+| `402` | Payment required — insufficient credits |
+| `403` | Forbidden — invalid file path |
+| `404` | Not found — resource or file does not exist |
+| `500` | Internal server error |
+
+Error responses include a `detail` field:
+
+```json
+{
+  "detail": "Insufficient credits (have 0, need 5)"
+}
+```

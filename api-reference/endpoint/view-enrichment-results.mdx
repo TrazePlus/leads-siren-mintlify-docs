@@ -1,0 +1,85 @@
+---
+title: 'View Enrichment Results'
+api: 'POST /enrichment-service/view-enrichment-results'
+---
+
+Retrieve paginated results from a completed enrichment job. Returns the enriched CSV data as JSON with pagination support.
+
+## Request Body
+
+<ParamField body="data" type="object">
+  <Expandable title="properties">
+    <ParamField body="record_id" type="string" required>
+      The record ID you provided when calling the `/enrich` endpoint.
+    </ParamField>
+    <ParamField body="page" type="integer" default="1">
+      Page number (1-indexed).
+    </ParamField>
+    <ParamField body="page_size" type="integer" default="25">
+      Number of records per page.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -X POST https://search.lespagesrouges.com/enrichment-service/view-enrichment-results \
+  -H "x-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "data": {
+      "record_id": "abc-123-def",
+      "page": 1,
+      "page_size": 10
+    }
+  }'
+```
+
+```python Python
+import requests
+
+resp = requests.post(
+    "https://search.lespagesrouges.com/enrichment-service/view-enrichment-results",
+    headers={"x-api-key": "YOUR_API_KEY"},
+    json={
+        "data": {
+            "record_id": "abc-123-def",
+            "page": 1,
+            "page_size": 10
+        }
+    }
+)
+print(resp.json())
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "total_records": 156,
+  "page": 1,
+  "page_size": 10,
+  "data": [
+    {
+      "full_name": "Jean Dupont",
+      "company": "Example SARL",
+      "siren": "123456789",
+      "phone": "+33 1 23 45 67 89",
+      "email": "jean.dupont@example.com"
+    }
+  ]
+}
+```
+
+```json 400
+{
+  "detail": "Missing record_id in data"
+}
+```
+
+```json 404
+{
+  "detail": "File path not found for the given record_id"
+}
+```
+</ResponseExample>

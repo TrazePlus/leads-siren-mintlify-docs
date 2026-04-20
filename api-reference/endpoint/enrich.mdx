@@ -1,0 +1,120 @@
+---
+title: 'Enrich'
+api: 'POST /enrichment-service/enrich'
+---
+
+Start a background enrichment task that combines company and executive data into an enriched CSV file. The task runs asynchronously — the endpoint returns immediately with a `record_id` that you use to check results and download the file.
+
+## Request Body
+
+<ParamField body="data" type="object">
+  <Expandable title="properties">
+    <ParamField body="record_id" type="string" required>
+      A unique identifier you generate for this enrichment job. Used to track status and retrieve results later.
+    </ParamField>
+    <ParamField body="executive_data" type="object">
+      Pre-fetched executive data to include in the enrichment.
+    </ParamField>
+    <ParamField body="filters" type="object">
+      Company search filters to find companies to enrich. All filter fields are optional.
+      <Expandable title="filter fields">
+        <ParamField body="q" type="string[]">
+          Free-text search terms (e.g. company name).
+        </ParamField>
+        <ParamField body="activite_principale" type="string[]">
+          NAF/APE activity codes (e.g. `["62.01Z", "62.02A"]`).
+        </ParamField>
+        <ParamField body="etat_administratif" type="string">
+          Administrative status. `"A"` for active, `"C"` for closed.
+        </ParamField>
+        <ParamField body="tranche_effectif_salarie" type="string[]">
+          Employee count ranges. Allowed values: `"0"`, `"1-9"`, `"10-49"`, `"50-199"`, `"200-499"`, `"500+"`.
+        </ParamField>
+        <ParamField body="departement" type="string[]">
+          French department codes (e.g. `["75", "92", "93"]`).
+        </ParamField>
+        <ParamField body="region" type="string">
+          French region code (e.g. `"11"` for Ile-de-France).
+        </ParamField>
+        <ParamField body="code_postal" type="string[]">
+          Postal codes (e.g. `["75001", "75002"]`).
+        </ParamField>
+        <ParamField body="nature_juridique" type="string[]">
+          Legal form categories. Allowed values: `"Entreprises individuelles"`, `"Sociétés commerciales"`, `"Sociétés civiles"`, `"Associations"`, `"Autres"`.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+    <ParamField body="limit" type="integer">
+      Maximum number of companies to process when using filters.
+    </ParamField>
+    <ParamField body="executive_ids" type="string[]">
+      Specific executive IDs to include in the enrichment.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Credit Cost
+
+Dynamic — credits are calculated based on the number of records actually enriched. The cost is deducted after the background task completes.
+
+<RequestExample>
+```bash cURL
+curl -X POST https://search.lespagesrouges.com/enrichment-service/enrich \
+  -H "x-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "data": {
+      "record_id": "abc-123-def",
+      "filters": {
+        "departement": ["75"],
+        "activite_principale": ["62.01Z"],
+        "etat_administratif": "A"
+      },
+      "limit": 50
+    }
+  }'
+```
+
+```python Python
+import requests
+
+resp = requests.post(
+    "https://search.lespagesrouges.com/enrichment-service/enrich",
+    headers={"x-api-key": "YOUR_API_KEY"},
+    json={
+        "data": {
+            "record_id": "abc-123-def",
+            "filters": {
+                "departement": ["75"],
+                "activite_principale": ["62.01Z"],
+                "etat_administratif": "A"
+            },
+            "limit": 50
+        }
+    }
+)
+print(resp.json())
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "status": "success",
+  "message": "Enrichment task started",
+  "record_id": "abc-123-def"
+}
+```
+
+```json 400
+{
+  "detail": "Missing record_id"
+}
+```
+
+```json 402
+{
+  "detail": "Insufficient credits (have 0, need 1)"
+}
+```
+</ResponseExample>

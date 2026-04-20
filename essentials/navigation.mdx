@@ -1,0 +1,43 @@
+---
+title: 'Navigation'
+description: 'Organize your documentation structure'
+---
+
+## Tabs and Groups
+
+The navigation is configured in `docs.json`. The API docs use a tab-based layout:
+
+```json
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": ["api-reference/introduction"]
+          },
+          {
+            "group": "Search",
+            "pages": [
+              "api-reference/endpoint/search-companies",
+              "api-reference/endpoint/search-executives"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Adding Pages
+
+1. Create a new `.mdx` file in the appropriate directory.
+2. Add the file path to the `pages` array in `docs.json`.
+3. The page appears in the sidebar immediately.
+
+## Page Ordering
+
+Pages appear in the sidebar in the same order they are listed in the `pages` array.
