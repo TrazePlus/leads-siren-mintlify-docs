@@ -32,8 +32,10 @@ Most API operations consume credits from your account balance. The credit cost v
 |---|---|
 | Search Companies | Fixed per request |
 | Search Executives | 1 credit per company/SIREN queried |
-| Enrich | Dynamic — based on records enriched |
-| Enrich Siren | Dynamic — based on records enriched |
+| Enrich | 1/SIREN + 5/email + 90/phone (email & phone skipped with `skip_contact_search`) |
+| Enrich Single | 1/SIREN + 5/email + 90/phone (email & phone skipped with `skip_contact_search`) |
+
+All endpoints that return executive data support `role_types` (filter by role) and `status_filter` (`"current"`, `"former"`, or `"all"`).
 
 If your account has insufficient credits, the API returns a `402 Payment Required` error with details about your current balance and the required amount.
 

@@ -44,12 +44,32 @@ Look up executives (dirigeants) for one or more companies. Provide SIREN numbers
     <ParamField body="limit" type="integer">
       Maximum number of companies to search when using `filters`.
     </ParamField>
+    <ParamField body="role_types" type="string[]">
+      Filter executives by role. Only persons whose role label exactly matches one of the provided values will be returned.
+
+      Valid values:
+      `"Président"`, `"Directeur général"`, `"Directeur général délégué"`, `"Gérant"`,
+      `"Gérant et associé indéfiniment responsable"`, `"Président du conseil d'administration"`,
+      `"Membre du directoire"`, `"Chef d'entreprise"`,
+      `"Administrateur"`, `"Membre du conseil de surveillance"`,
+      `"Commissaire aux comptes titulaire"`, `"Commissaire aux comptes suppléant"`,
+      `"Membre"`, `"Associé indéfiniment responsable"`, `"Autre"`,
+      `"Liquidateur"`
+
+      If omitted, all roles are returned.
+    </ParamField>
+    <ParamField body="status_filter" type="string">
+      Filter by executive status. `"current"` for active executives, `"former"` for former executives, `"all"` or omit for both.
+    </ParamField>
+    <ParamField body="page" type="integer" default="1">
+      Page number for paginated results. Each page returns up to 20 executives. Defaults to `1`.
+    </ParamField>
   </Expandable>
 </ParamField>
 
 ## Credit Cost
 
-**1 credit per company/SIREN** queried.
+**1 credit per company/SIREN** queried. Credits are charged on the full result set on the first page request — subsequent pages for the same query cost nothing extra.
 
 <RequestExample>
 ```bash cURL
@@ -58,7 +78,10 @@ curl -X POST https://search.lespagesrouges.com/enrichment-service/search_executi
   -H "Content-Type: application/json" \
   -d '{
     "data": {
-      "siren_numbers": ["123456789", "987654321"]
+      "siren_numbers": ["123456789", "987654321"],
+      "role_types": ["Président", "Directeur général", "Gérant"],
+      "status_filter": "current",
+      "page": 1
     }
   }'
 ```
@@ -71,7 +94,10 @@ resp = requests.post(
     headers={"x-api-key": "YOUR_API_KEY"},
     json={
         "data": {
-            "siren_numbers": ["123456789", "987654321"]
+            "siren_numbers": ["123456789", "987654321"],
+            "role_types": ["Président", "Directeur général", "Gérant"],
+            "status_filter": "current",
+            "page": 1
         }
     }
 )
@@ -82,10 +108,15 @@ print(resp.json())
 <ResponseExample>
 ```json 200
 {
+  "total": 36,
+  "page": 1,
+  "per_page": 20,
+  "total_pages": 2,
   "people": [
     {
       "nom_complet": "Jean Dupont",
       "qualite": "Président",
+      "status": "current",
       "date_de_naissance": "1975-03-15",
       "entreprises": [ ... ]
     }

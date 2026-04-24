@@ -50,12 +50,34 @@ Start a background enrichment task that combines company and executive data into
     <ParamField body="executive_ids" type="string[]">
       Specific executive IDs to include in the enrichment.
     </ParamField>
+    <ParamField body="skip_contact_search" type="boolean" default="false">
+      When `true`, skips the contact information lookup (email and phone). The export will contain company and executive data only. No email (5 credits) or phone (90 credits) charges are applied — only the per-SIREN lookup cost.
+    </ParamField>
+    <ParamField body="role_types" type="string[]">
+      Filter executives by role before enrichment. Only persons whose role label exactly matches one of the provided values will be enriched.
+
+      Valid values:
+      `"Président"`, `"Directeur général"`, `"Directeur général délégué"`, `"Gérant"`,
+      `"Gérant et associé indéfiniment responsable"`, `"Président du conseil d'administration"`,
+      `"Membre du directoire"`, `"Chef d'entreprise"`,
+      `"Administrateur"`, `"Membre du conseil de surveillance"`,
+      `"Commissaire aux comptes titulaire"`, `"Commissaire aux comptes suppléant"`,
+      `"Membre"`, `"Associé indéfiniment responsable"`, `"Autre"`,
+      `"Liquidateur"`
+    </ParamField>
+    <ParamField body="status_filter" type="string">
+      Filter by executive status before enrichment. `"current"` for active executives, `"former"` for former executives, `"all"` or omit for both.
+    </ParamField>
   </Expandable>
 </ParamField>
 
 ## Credit Cost
 
 Dynamic — credits are calculated based on the number of records actually enriched. The cost is deducted after the background task completes.
+
+- **Per SIREN lookup**: 1 credit per company/SIREN
+- **Per email found**: 5 credits (skipped when `skip_contact_search` is `true`)
+- **Per phone found**: 90 credits (skipped when `skip_contact_search` is `true`)
 
 <RequestExample>
 ```bash cURL

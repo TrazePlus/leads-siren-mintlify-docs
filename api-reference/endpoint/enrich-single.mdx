@@ -12,6 +12,24 @@ Synchronously enrich data for a single company identified by its SIREN number. U
     <ParamField body="siren" type="string" required>
       The 9-digit SIREN number of the company to enrich.
     </ParamField>
+    <ParamField body="skip_contact_search" type="boolean" default="false">
+      When `true`, skips the contact information lookup (email and phone). Only the per-SIREN lookup cost applies — no email (5 credits) or phone (90 credits) charges.
+    </ParamField>
+    <ParamField body="role_types" type="string[]">
+      Filter executives by role. Only persons whose role label matches will be enriched.
+
+      Valid values:
+      `"Président"`, `"Directeur général"`, `"Directeur général délégué"`, `"Gérant"`,
+      `"Gérant et associé indéfiniment responsable"`, `"Président du conseil d'administration"`,
+      `"Membre du directoire"`, `"Chef d'entreprise"`,
+      `"Administrateur"`, `"Membre du conseil de surveillance"`,
+      `"Commissaire aux comptes titulaire"`, `"Commissaire aux comptes suppléant"`,
+      `"Membre"`, `"Associé indéfiniment responsable"`, `"Autre"`,
+      `"Liquidateur"`
+    </ParamField>
+    <ParamField body="status_filter" type="string">
+      Filter by executive status. `"current"` for active, `"former"` for former, `"all"` or omit for both.
+    </ParamField>
   </Expandable>
 </ParamField>
 
