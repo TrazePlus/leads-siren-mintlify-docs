@@ -33,7 +33,8 @@
             "group": "Enrichment",
             "pages": [
               "api-reference/endpoint/enrich",
-              "api-reference/endpoint/enrich-single"
+              "api-reference/endpoint/enrich-single",
+              "api-reference/endpoint/siren-enrich"
             ]
           },
           {
@@ -56,13 +57,13 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:support@lespagesrouges.com"
+        "href": "mailto:support@leads-siren.com"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://search.lespagesrouges.com"
+      "href": "https://search.leads-siren.com"
     }
   },
   "contextual": {
@@ -79,7 +80,7 @@
   },
   "api": {
     "mdx": {
-      "server": "https://search.lespagesrouges.com",
+      "server": "https://search.leads-siren.com",
       "auth": {
         "method": "key",
         "name": "x-api-key"

@@ -10,7 +10,7 @@ The Enrichment Service API provides endpoints for searching French companies and
 ## Base URL
 
 ```
-https://search.lespagesrouges.com/enrichment-service
+https://search.leads-siren.com/enrichment-service
 ```
 
 ## Authentication
@@ -19,7 +19,7 @@ All secured endpoints require an API key sent in the `x-api-key` header:
 
 ```bash
 curl -H "x-api-key: YOUR_API_KEY" \
-  https://search.lespagesrouges.com/enrichment-service/test
+  https://search.leads-siren.com/enrichment-service/test
 ```
 
 Invalid or missing keys return `401 Unauthorized`.
@@ -34,6 +34,7 @@ Most API operations consume credits from your account balance. The credit cost v
 | Search Executives | 1 credit per company/SIREN queried |
 | Enrich | 1/SIREN + 5/email + 90/phone (email & phone skipped with `skip_contact_search`) |
 | Enrich Single | 1/SIREN + 5/email + 90/phone (email & phone skipped with `skip_contact_search`) |
+| SIREN Enrich (LPR) | 1/dirigeant + 5/email + 90/phone (contacts charged only for `score > 40`) |
 
 All endpoints that return executive data support `role_types` (filter by role) and `status_filter` (`"current"`, `"former"`, or `"all"`).
 

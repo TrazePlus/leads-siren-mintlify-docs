@@ -1,0 +1,228 @@
+---
+title: 'SIREN Enrich (LPR)'
+api: 'POST /enrichment-service/siren-enrich'
+---
+
+Synchronously enrich a single SIREN through the **Les Pages Rouges (LPR)** matching pipeline. The endpoint pulls the company's dirigeants from Pappers, searches LPR for each person, scores every candidate against the Pappers record, aggregates the strongest signals into a *golden record* per person, and returns the enriched rows in one response.
+
+Unlike [`/enrich-single`](./enrich-single), the response embeds a confidence **score** (0–180+) and a tier **statut** (`Certain` / `Probable` / `À vérifier`) per row, plus a `lpr_debug.breakdown` that explains which signals fired (DOB, address, name, postal, city, combo).
+
+## Request Body
+
+<ParamField body="data" type="object">
+  <Expandable title="properties">
+    <ParamField body="siren" type="string" required>
+      The 9-digit SIREN number of the company to enrich.
+    </ParamField>
+    <ParamField body="role_types" type="string[]">
+      Filter dirigeants by role label. Only persons whose `qualite` exactly matches one of the provided values are returned.
+
+      Valid values:
+      `"Président"`, `"Directeur général"`, `"Directeur général délégué"`, `"Gérant"`,
+      `"Gérant et associé indéfiniment responsable"`, `"Président du conseil d'administration"`,
+      `"Membre du directoire"`, `"Chef d'entreprise"`,
+      `"Administrateur"`, `"Membre du conseil de surveillance"`,
+      `"Commissaire aux comptes titulaire"`, `"Commissaire aux comptes suppléant"`,
+      `"Membre"`, `"Associé indéfiniment responsable"`, `"Autre"`,
+      `"Liquidateur"`
+    </ParamField>
+    <ParamField body="status_filter" type="string">
+      Reserved for parity with `/enrich-single`. Status filtering (`"current"` / `"former"` / `"all"`) is **not propagated** through the LPR pipeline today — the value is accepted and logged but has no effect on the response. Use `/enrich-single` if you need status filtering.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Confidence Scoring
+
+Each candidate document is scored independently, then the best one per person becomes the golden record. Signal weights:
+
+| Signal | Weight | Notes |
+|---|---|---|
+| Date of birth match | +70 | A divergent DOB **eliminates** the candidate entirely. |
+| Address match | +40 | Falls back to the company `siege` when the personal address is null. |
+| Name match | +20 | Punctuation-tolerant token comparison (handles `"Patrick, Jean-louis Belmon"`). |
+| Postal code match | +20 | |
+| City match | +20 | Token-subset comparison — accepts `LIMOGES CEDEX` ≈ `LIMOGES`. |
+| Birth city match | +5 | |
+| Name + Postal + City combo | +20 | Bonus when all three location-anchored signals fire together. |
+
+The resulting score is mapped to a `statut`:
+
+| Score | `statut` | Meaning |
+|---|---|---|
+| `≥ 60` | `Certain` | High confidence — contact data returned. |
+| `40 – 59` | `Probable` | Medium confidence — contact data returned. |
+| `< 40` | `À vérifier` | Low confidence — `telephone_mobile`, `telephone_autre` and `emails` are returned **empty** to avoid charging for weak matches. |
+
+## Credit Cost
+
+Dynamic — calculated **after** the pipeline runs and only deducted if your balance covers it:
+
+- **1 credit** per dirigeant returned (Pappers lookup)
+- **5 credits** per `emails` found, **only** for rows with `score > 40`
+- **90 credits** per phone number found (`telephone_mobile` or `telephone_autre`), **only** for rows with `score > 40`
+
+If the computed cost exceeds your balance the response is still returned, but no credits are deducted (the request is logged as `insufficient credits`).
+
+<RequestExample>
+```bash cURL
+curl -X POST https://search.leads-siren.com/enrichment-service/siren-enrich \
+  -H "x-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "data": {
+      "siren": "340822899"
+    }
+  }'
+```
+
+```python Python
+import requests
+
+resp = requests.post(
+    "https://search.leads-siren.com/enrichment-service/siren-enrich",
+    headers={"x-api-key": "YOUR_API_KEY"},
+    json={
+        "data": {
+            "siren": "340822899",
+            "role_types": ["Gérant", "Président"]
+        }
+    }
+)
+print(resp.json())
+```
+
+```javascript JavaScript
+const resp = await fetch(
+  "https://search.leads-siren.com/enrichment-service/siren-enrich",
+  {
+    method: "POST",
+    headers: {
+      "x-api-key": "YOUR_API_KEY",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      data: { siren: "340822899" }
+    })
+  }
+);
+const json = await resp.json();
+console.log(json);
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "siren_origine": "340822899",
+  "denomination_origine": "BELMON PATRICK",
+  "code_naf_origine": "86.23Z",
+  "total_records": 1,
+  "resultats": [
+    {
+      "nom_complet": "Patrick, Jean-louis Belmon",
+      "qualite": "Gérant",
+      "departement": "87",
+      "date_naissance": "1958-04-12",
+      "adresse_input": "1 RUE VICTOR SCHOELCHER",
+      "code_postal_input": "87000",
+      "ville_input": "LIMOGES",
+      "ville_naissance": "LIMOGES",
+      "score": 40,
+      "statut": "Probable",
+      "telephone_mobile": ["+33612345678"],
+      "telephone_autre": [],
+      "emails": ["patrick.belmon@example.fr"],
+      "adresse_trouvee": "1 RUE VICTOR SCHOELCHER",
+      "ville_trouvee": "LIMOGES CEDEX",
+      "code_postal_trouve": "87000",
+      "hlr_mobile": "",
+      "hlr_status": "",
+      "lpr_debug": {
+        "breakdown": {
+          "name": 20,
+          "postal": 20
+        },
+        "candidates_considered": 3,
+        "dob_eliminated": 0
+      }
+    }
+  ],
+  "credits_used": {
+    "total": 96
+  }
+}
+```
+
+```json 200 — low-confidence row (contact data stripped)
+{
+  "siren_origine": "123456789",
+  "denomination_origine": "EXAMPLE SARL",
+  "code_naf_origine": "62.01Z",
+  "total_records": 1,
+  "resultats": [
+    {
+      "nom_complet": "Jean Dupont",
+      "qualite": "Gérant",
+      "departement": "75",
+      "score": 25,
+      "statut": "À vérifier",
+      "telephone_mobile": [],
+      "telephone_autre": [],
+      "emails": [],
+      "lpr_debug": { "breakdown": { "name": 20, "birth_city": 5 } }
+    }
+  ],
+  "credits_used": { "total": 1 }
+}
+```
+
+```json 400
+{
+  "detail": "Missing siren"
+}
+```
+
+```json 401
+{
+  "detail": "Invalid API key"
+}
+```
+
+```json 402
+{
+  "detail": "Insufficient credits (have 12, need 96)"
+}
+```
+</ResponseExample>
+
+## Response Fields
+
+The top-level payload:
+
+| Field | Type | Description |
+|---|---|---|
+| `siren_origine` | string | The SIREN you queried. |
+| `denomination_origine` | string | Company name from Pappers. |
+| `code_naf_origine` | string | NAF/APE activity code from Pappers. |
+| `total_records` | integer | Number of `resultats` returned (post-filter). |
+| `resultats` | array | One row per dirigeant; see below. |
+| `credits_used.total` | integer | Total credits deducted for this request. |
+
+Each row in `resultats`:
+
+| Field | Type | Description |
+|---|---|---|
+| `nom_complet` | string | Display name from Pappers. |
+| `qualite` | string | Role label (e.g. `Gérant`). |
+| `departement` | string | French department code derived from input postal code. |
+| `date_naissance` | string | Formatted DOB from Pappers (`YYYY-MM-DD`). |
+| `adresse_input` / `code_postal_input` / `ville_input` | string | Address actually fed into the matcher (personal address, with siege fallback for `EI` rows). |
+| `ville_naissance` | string | Birth city from Pappers. |
+| `score` | integer | Confidence score (see table above). |
+| `statut` | string | `Certain` / `Probable` / `À vérifier`. |
+| `telephone_mobile` / `telephone_autre` | string[] | Phone numbers from the golden record. Empty for `À vérifier` rows. |
+| `emails` | string[] | Email addresses from the golden record. Empty for `À vérifier` rows. |
+| `adresse_trouvee` / `code_postal_trouve` / `ville_trouvee` | string | Address actually matched on the LPR side. |
+| `hlr_mobile` / `hlr_status` | string | Reserved for HLR enrichment (not populated by this endpoint). |
+| `lpr_debug.breakdown` | object | Per-signal score contributions (e.g. `{"name": 20, "postal": 20, "combo_name_postal_city": 20}`). Useful for debugging why a row landed at a given tier. |

@@ -81,7 +81,7 @@ Dynamic — credits are calculated based on the number of records actually enric
 
 <RequestExample>
 ```bash cURL
-curl -X POST https://search.lespagesrouges.com/enrichment-service/enrich \
+curl -X POST https://search.leads-siren.com/enrichment-service/enrich \
   -H "x-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -101,7 +101,7 @@ curl -X POST https://search.lespagesrouges.com/enrichment-service/enrich \
 import requests
 
 resp = requests.post(
-    "https://search.lespagesrouges.com/enrichment-service/enrich",
+    "https://search.leads-siren.com/enrichment-service/enrich",
     headers={"x-api-key": "YOUR_API_KEY"},
     json={
         "data": {

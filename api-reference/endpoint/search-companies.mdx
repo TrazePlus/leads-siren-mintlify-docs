@@ -49,7 +49,7 @@ A fixed number of credits is deducted per request.
 
 <RequestExample>
 ```bash cURL
-curl -X POST https://search.lespagesrouges.com/enrichment-service/search_companies \
+curl -X POST https://search.leads-siren.com/enrichment-service/search_companies \
   -H "x-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -70,7 +70,7 @@ curl -X POST https://search.lespagesrouges.com/enrichment-service/search_compani
 import requests
 
 resp = requests.post(
-    "https://search.lespagesrouges.com/enrichment-service/search_companies",
+    "https://search.leads-siren.com/enrichment-service/search_companies",
     headers={"x-api-key": "YOUR_API_KEY"},
     json={
         "data": {

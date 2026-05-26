@@ -73,7 +73,7 @@ Look up executives (dirigeants) for one or more companies. Provide SIREN numbers
 
 <RequestExample>
 ```bash cURL
-curl -X POST https://search.lespagesrouges.com/enrichment-service/search_executives \
+curl -X POST https://search.leads-siren.com/enrichment-service/search_executives \
   -H "x-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -90,7 +90,7 @@ curl -X POST https://search.lespagesrouges.com/enrichment-service/search_executi
 import requests
 
 resp = requests.post(
-    "https://search.lespagesrouges.com/enrichment-service/search_executives",
+    "https://search.leads-siren.com/enrichment-service/search_executives",
     headers={"x-api-key": "YOUR_API_KEY"},
     json={
         "data": {

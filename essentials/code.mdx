@@ -20,7 +20,7 @@ Use `<CodeGroup>` to show the same example in multiple languages:
 
 <CodeGroup>
 ```bash cURL
-curl -X POST https://search.lespagesrouges.com/enrichment-service/search_companies \
+curl -X POST https://search.leads-siren.com/enrichment-service/search_companies \
   -H "x-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"data": {"filters": {"departement": "75"}, "page": 1}}'
@@ -30,7 +30,7 @@ curl -X POST https://search.lespagesrouges.com/enrichment-service/search_compani
 import requests
 
 resp = requests.post(
-    "https://search.lespagesrouges.com/enrichment-service/search_companies",
+    "https://search.leads-siren.com/enrichment-service/search_companies",
     headers={"x-api-key": "YOUR_API_KEY"},
     json={"data": {"filters": {"departement": "75"}, "page": 1}}
 )
@@ -38,7 +38,7 @@ resp = requests.post(
 
 ```javascript JavaScript
 const resp = await fetch(
-  "https://search.lespagesrouges.com/enrichment-service/search_companies",
+  "https://search.leads-siren.com/enrichment-service/search_companies",
   {
     method: "POST",
     headers: {

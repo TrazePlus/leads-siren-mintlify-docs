@@ -39,7 +39,7 @@ Dynamic — based on the number of records enriched for the given SIREN.
 
 <RequestExample>
 ```bash cURL
-curl -X POST https://search.lespagesrouges.com/enrichment-service/enrich-single \
+curl -X POST https://search.leads-siren.com/enrichment-service/enrich-single \
   -H "x-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -53,7 +53,7 @@ curl -X POST https://search.lespagesrouges.com/enrichment-service/enrich-single 
 import requests
 
 resp = requests.post(
-    "https://search.lespagesrouges.com/enrichment-service/enrich-single",
+    "https://search.leads-siren.com/enrichment-service/enrich-single",
     headers={"x-api-key": "YOUR_API_KEY"},
     json={
         "data": {

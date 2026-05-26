@@ -17,7 +17,7 @@ Generate a temporary download URL for the enriched CSV file from a completed enr
 
 <RequestExample>
 ```bash cURL
-curl -X POST https://search.lespagesrouges.com/enrichment-service/generate-download-url \
+curl -X POST https://search.leads-siren.com/enrichment-service/generate-download-url \
   -H "x-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -31,7 +31,7 @@ curl -X POST https://search.lespagesrouges.com/enrichment-service/generate-downl
 import requests
 
 resp = requests.post(
-    "https://search.lespagesrouges.com/enrichment-service/generate-download-url",
+    "https://search.leads-siren.com/enrichment-service/generate-download-url",
     headers={"x-api-key": "YOUR_API_KEY"},
     json={
         "data": {
@@ -47,7 +47,7 @@ print(url)
 <ResponseExample>
 ```json 200
 {
-  "download_url": "https://search.lespagesrouges.com/enrichment-service/download/abc123token"
+  "download_url": "https://search.leads-siren.com/enrichment-service/download/abc123token"
 }
 ```
 

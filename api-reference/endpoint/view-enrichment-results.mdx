@@ -23,7 +23,7 @@ Retrieve paginated results from a completed enrichment job. Returns the enriched
 
 <RequestExample>
 ```bash cURL
-curl -X POST https://search.lespagesrouges.com/enrichment-service/view-enrichment-results \
+curl -X POST https://search.leads-siren.com/enrichment-service/view-enrichment-results \
   -H "x-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -39,7 +39,7 @@ curl -X POST https://search.lespagesrouges.com/enrichment-service/view-enrichmen
 import requests
 
 resp = requests.post(
-    "https://search.lespagesrouges.com/enrichment-service/view-enrichment-results",
+    "https://search.leads-siren.com/enrichment-service/view-enrichment-results",
     headers={"x-api-key": "YOUR_API_KEY"},
     json={
         "data": {

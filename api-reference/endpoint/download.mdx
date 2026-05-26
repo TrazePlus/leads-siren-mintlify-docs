@@ -17,14 +17,14 @@ Returns a CSV file as a binary download with `Content-Type: text/csv`.
 
 <RequestExample>
 ```bash cURL
-curl -O https://search.lespagesrouges.com/enrichment-service/download/abc123token
+curl -O https://search.leads-siren.com/enrichment-service/download/abc123token
 ```
 
 ```python Python
 import requests
 
 resp = requests.get(
-    "https://search.lespagesrouges.com/enrichment-service/download/abc123token"
+    "https://search.leads-siren.com/enrichment-service/download/abc123token"
 )
 
 with open("enriched_data.csv", "wb") as f:
