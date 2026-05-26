@@ -5,7 +5,25 @@ api: 'POST /enrichment-service/siren-enrich'
 
 Synchronously enrich a single SIREN through the **Les Pages Rouges (LPR)** matching pipeline. The endpoint pulls the company's dirigeants from Pappers, searches LPR for each person, scores every candidate against the Pappers record, aggregates the strongest signals into a *golden record* per person, and returns the enriched rows in one response.
 
-Unlike [`/enrich-single`](./enrich-single), the response embeds a confidence **score** (0–180+) and a tier **statut** (`Certain` / `Probable` / `À vérifier`) per row, plus a `lpr_debug.breakdown` that explains which signals fired (DOB, address, name, postal, city, combo).
+The response embeds a confidence **score** (0–180+) and a tier **statut** (`Certain` / `Probable` / `À vérifier`) per row, plus a `lpr_debug.breakdown` that explains which signals fired (DOB, address, name, postal, city, combo).
+
+<Note>
+  **Choosing between `/siren-enrich` and [`/enrich-single`](./enrich-single):**
+
+  Both endpoints take a SIREN and return contact info for its dirigeants. They use different matching engines and have different trade-offs.
+
+  | | `/siren-enrich` (this endpoint) | [`/enrich-single`](./enrich-single) |
+  |---|---|---|
+  | Matching engine | Les Pages Rouges (LPR) + Pappers pipeline | Legacy enrichment engine |
+  | Per-row confidence score | ✅ `score` + `statut` (`Certain` / `Probable` / `À vérifier`) | ❌ not exposed |
+  | DOB-mismatch elimination | ✅ candidates with divergent DOBs are dropped | ❌ no |
+  | Siege address fallback | ✅ falls back to company siege when personal address is null | ❌ no |
+  | `status_filter` (`current` / `former`) | ⚠️ accepted but not honored | ✅ supported |
+  | Audit/debug data per row | ✅ `lpr_debug.breakdown` | ❌ no |
+
+  **Use this endpoint** for new integrations — the transparent score lets you gate on `Certain` / `Probable` matches and skip paying for low-confidence ones (contacts are only charged when `score > 40`).
+  **Use [`/enrich-single`](./enrich-single)** when you specifically need `status_filter`.
+</Note>
 
 ## Request Body
 

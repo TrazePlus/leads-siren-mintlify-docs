@@ -3,7 +3,25 @@ title: 'Enrich Single'
 api: 'POST /enrichment-service/enrich-single'
 ---
 
-Synchronously enrich data for a single company identified by its SIREN number. Unlike the background `/enrich` endpoint, this returns the enriched data directly in the response.
+Synchronously enrich data for a single company identified by its SIREN number. Returns the enriched data directly in the response.
+
+<Note>
+  **Choosing between `/enrich-single` and [`/siren-enrich`](./siren-enrich):**
+
+  Both endpoints take a SIREN and return contact info for its dirigeants. They use different matching engines and have different trade-offs.
+
+  | | `/enrich-single` (this endpoint) | [`/siren-enrich`](./siren-enrich) |
+  |---|---|---|
+  | Matching engine | Legacy enrichment engine | Les Pages Rouges (LPR) + Pappers pipeline |
+  | Per-row confidence score | ❌ not exposed | ✅ `score` + `statut` (`Certain` / `Probable` / `À vérifier`) |
+  | DOB-mismatch elimination | ❌ no | ✅ candidates with divergent DOBs are dropped |
+  | Siege address fallback | ❌ no | ✅ falls back to company siege when personal address is null |
+  | `status_filter` (`current` / `former`) | ✅ supported | ⚠️ accepted but not honored |
+  | Audit/debug data per row | ❌ no | ✅ `lpr_debug.breakdown` |
+
+  **Use this endpoint** when you need `status_filter` or want the legacy enrichment behavior.
+  **Use [`/siren-enrich`](./siren-enrich)** for new integrations — it returns a transparent confidence score per row so you can gate on `Certain` / `Probable` matches and avoid paying for low-confidence ones.
+</Note>
 
 ## Request Body
 

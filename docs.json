@@ -32,7 +32,6 @@
           {
             "group": "Enrichment",
             "pages": [
-              "api-reference/endpoint/enrich",
               "api-reference/endpoint/enrich-single",
               "api-reference/endpoint/siren-enrich"
             ]
