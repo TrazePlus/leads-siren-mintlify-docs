@@ -34,9 +34,11 @@ Synchronously enrich data for a single company identified by its SIREN number. R
       When `true`, skips the contact information lookup (email and phone). Only the per-SIREN lookup cost applies — no email (5 credits) or phone (90 credits) charges.
     </ParamField>
     <ParamField body="role_types" type="string[]">
-      Filter executives by role. Only persons whose role label matches will be enriched.
+      Filter executives by role. Accepts **role group names** or individual role labels.
 
-      Valid values:
+      **Role groups:** `"Executives"`, `"Governance & Audit"`, `"Shareholders & Other"`, `"Liquidator"`, `"All"`
+
+      **Individual labels:**
       `"Président"`, `"Directeur général"`, `"Directeur général délégué"`, `"Gérant"`,
       `"Gérant et associé indéfiniment responsable"`, `"Président du conseil d'administration"`,
       `"Membre du directoire"`, `"Chef d'entreprise"`,

@@ -1,0 +1,102 @@
+---
+title: 'Enrich (Bulk)'
+api: 'POST /enrichment-service/enrich'
+---
+
+Start an asynchronous enrichment job. When used with only a `record_id` (bulk-upload mode), it reads a previously uploaded CSV of SIRENs and enriches officers in the background.
+
+<Note>
+  **Bulk-upload defaults:** When no `role_types` or `status_filter` are provided in bulk mode, the system defaults to `role_types = ["Executives"]` and `status_filter = "current"`. This excludes governance/audit officers and former mandates by default — preventing irrelevant contacts (e.g. former statutory auditors) from appearing in results.
+
+  Pass `role_types: ["All"]` and `status_filter: "all"` to override and include everyone.
+</Note>
+
+## Request Body
+
+<ParamField body="data" type="object">
+  <Expandable title="properties">
+    <ParamField body="record_id" type="string" required>
+      The bulk record ID (from the upload step). The system reads the associated `input_file_path` CSV.
+    </ParamField>
+    <ParamField body="role_types" type="string[]">
+      Filter officers by role before enrichment. Accepts role group names or individual labels.
+
+      **Role groups:** `"Executives"` (default), `"Governance & Audit"`, `"Shareholders & Other"`, `"Liquidator"`, `"All"`
+
+      **Individual labels:**
+      `"Président"`, `"Directeur général"`, `"Directeur général délégué"`, `"Gérant"`,
+      `"Gérant et associé indéfiniment responsable"`, `"Président du conseil d'administration"`,
+      `"Membre du directoire"`, `"Chef d'entreprise"`,
+      `"Administrateur"`, `"Membre du conseil de surveillance"`,
+      `"Commissaire aux comptes titulaire"`, `"Commissaire aux comptes suppléant"`,
+      `"Membre"`, `"Associé indéfiniment responsable"`, `"Autre"`,
+      `"Liquidateur"`
+
+      Defaults to `["Executives"]` in bulk mode.
+    </ParamField>
+    <ParamField body="status_filter" type="string">
+      Filter by executive status. `"current"` (default in bulk mode), `"former"`, or `"all"`.
+    </ParamField>
+    <ParamField body="skip_contact_search" type="boolean" default="false">
+      When `true`, skips contact information lookup (email and phone).
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Response
+
+The endpoint returns immediately with a confirmation — enrichment runs in the background.
+
+Use [`/view-enrichment-results`](./view-enrichment-results) or [`/generate-download-url`](./generate-download-url) to retrieve results once complete.
+
+## Credit Cost
+
+Dynamic — 1 credit per SIREN lookup + 5 per email + 90 per phone (only for results with score > 40).
+
+<RequestExample>
+```bash cURL
+curl -X POST https://search.leads-siren.com/enrichment-service/enrich \
+  -H "x-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "data": {
+      "record_id": "665f1a2b3c4d5e6f7a8b9c0d",
+      "role_types": ["Executives"],
+      "status_filter": "current"
+    }
+  }'
+```
+
+```python Python
+import requests
+
+resp = requests.post(
+    "https://search.leads-siren.com/enrichment-service/enrich",
+    headers={"x-api-key": "YOUR_API_KEY"},
+    json={
+        "data": {
+            "record_id": "665f1a2b3c4d5e6f7a8b9c0d",
+            "role_types": ["Executives"],
+            "status_filter": "current"
+        }
+    }
+)
+print(resp.json())
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "status": "success",
+  "message": "Enrichment task started",
+  "record_id": "665f1a2b3c4d5e6f7a8b9c0d"
+}
+```
+
+```json 402
+{
+  "detail": "Insufficient credits (have 2, need 5)"
+}
+```
+</ResponseExample>

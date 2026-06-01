@@ -26,12 +26,14 @@
             "group": "Search",
             "pages": [
               "api-reference/endpoint/search-companies",
-              "api-reference/endpoint/search-executives"
+              "api-reference/endpoint/search-executives",
+              "api-reference/endpoint/executive-counts"
             ]
           },
           {
             "group": "Enrichment",
             "pages": [
+              "api-reference/endpoint/enrich",
               "api-reference/endpoint/enrich-single",
               "api-reference/endpoint/siren-enrich"
             ]

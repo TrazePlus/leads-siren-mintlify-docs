@@ -45,9 +45,16 @@ Look up executives (dirigeants) for one or more companies. Provide SIREN numbers
       Maximum number of companies to search when using `filters`.
     </ParamField>
     <ParamField body="role_types" type="string[]">
-      Filter executives by role. Only persons whose role label exactly matches one of the provided values will be returned.
+      Filter executives by role. Accepts **role group names** or individual Pappers role labels (or a mix of both).
 
-      Valid values:
+      **Role groups** (recommended for UI filters):
+      - `"Executives"` — Président, Directeur général, DGD, Gérant, PCA, Membre du directoire, Chef d'entreprise
+      - `"Governance & Audit"` — Administrateur, Membre du conseil de surveillance, Commissaire aux comptes (titulaire + suppléant)
+      - `"Shareholders & Other"` — Membre, Associé indéfiniment responsable, Autre
+      - `"Liquidator"` — Liquidateur
+      - `"All"` — no filtering (returns every role)
+
+      **Individual role labels** (for fine-grained control):
       `"Président"`, `"Directeur général"`, `"Directeur général délégué"`, `"Gérant"`,
       `"Gérant et associé indéfiniment responsable"`, `"Président du conseil d'administration"`,
       `"Membre du directoire"`, `"Chef d'entreprise"`,
