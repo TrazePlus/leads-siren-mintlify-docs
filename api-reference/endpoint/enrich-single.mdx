@@ -55,7 +55,7 @@ Synchronously enrich data for a single company identified by its SIREN number. R
 
 ## Credit Cost
 
-Dynamic — based on the number of records enriched for the given SIREN.
+Dynamic — 1 credit per SIREN lookup + 100 per person with phone + 10 per person with email (contacts charged only when match `score > 40`).
 
 <RequestExample>
 ```bash cURL

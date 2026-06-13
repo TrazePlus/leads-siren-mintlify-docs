@@ -77,8 +77,8 @@ The resulting score is mapped to a `statut`:
 Dynamic — calculated **after** the pipeline runs and only deducted if your balance covers it:
 
 - **1 credit** per dirigeant returned (Pappers lookup)
-- **5 credits** per `emails` found, **only** for rows with `score > 40`
-- **90 credits** per phone number found (`telephone_mobile` or `telephone_autre`), **only** for rows with `score > 40`
+- **10 credits** per person with email found, **only** for rows with `score > 40`
+- **100 credits** per person with phone found (`telephone_mobile` or `telephone_autre`), **only** for rows with `score > 40`
 
 If the computed cost exceeds your balance the response is still returned, but no credits are deducted (the request is logged as `insufficient credits`).
 
