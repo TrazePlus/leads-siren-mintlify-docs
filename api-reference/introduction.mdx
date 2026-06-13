@@ -38,7 +38,7 @@ Most API operations consume credits from your account balance. The credit cost v
 | Export Executives | Free (no contact lookup) |
 | Executive Counts | Free |
 
-All endpoints that return executive data support `role_types` (filter by role group), `status_filter` (`"current"`, `"former"`, or `"all"`), and `person_type` (`"physical"`, `"legal"`, or `"all"`).
+All endpoints that return executive data support `role_types` (filter by role group), `status_filter` (`"current"`, `"former"`, or `"all"`), and `person_type` (`"physical"`, `"legal"`, or `"all"`). If omitted, all filters default to `"all"` (no filtering).
 
 If your account has insufficient credits, the API returns a `402 Payment Required` error with details about your current balance and the required amount.
 
